@@ -27,8 +27,11 @@ const isNumber = (numberInString) => !isNaN(Number(numberInString));
 
 // get parsed data
 app.get("/api/:date", (req, res) => {
+  let parsedDate = new Date();
   const { date } = req.params;
-  const parsedDate = new Date(isNumber(date) ? Number(date) : date);
+  if (date) {
+    parsedDate = new Date(isNumber(date) ? Number(date) : date);
+  }
   if (parsedDate.toString() !== "Invalid Date") {
     return res.json({
       unix: parsedDate.getTime(),
