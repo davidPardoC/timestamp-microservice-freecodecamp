@@ -23,24 +23,23 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: "hello API" });
 });
 
-const isNumber = (numberInString) => !isNaN(Number(numberInString))
+const isNumber = (numberInString) => !isNaN(Number(numberInString));
 
 // get parsed data
 app.get("/api/:date", (req, res) => {
   const { date } = req.params;
-  try {
-    const parsedDate = new Date(isNumber(date) ? Number(date): date);
+  if (new Date(date).getTime() === null) {
+    const parsedDate = new Date(isNumber(date) ? Number(date) : date);
     return res.json({
       unix: parsedDate.getTime(),
       utc: parsedDate.toUTCString(),
     });
-  } catch (error) {
-    return res.json({ error: "Invalid Date" });
   }
+  return res.json({ error: "Invalid Date" });
 });
 
 app.get("/api/", (req, res) => {
-  const parsedDate = new Date()
+  const parsedDate = new Date();
   return res.json({
     unix: parsedDate.getTime(),
     utc: parsedDate.toUTCString(),
